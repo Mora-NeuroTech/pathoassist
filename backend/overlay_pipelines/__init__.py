@@ -12,6 +12,7 @@ from api_models import Pipeline
 from .cell_count_pipeline import CellCountPipeline
 from .fluorescence_pipeline import FluorescencePipeline
 from .overlay_pipeline import OverlayPipeline
+from .estrogen_receptor_pipeline import EstrogenReceptorPipeline
 
 
 @dataclass
@@ -43,3 +44,4 @@ def list_available_pipelines() -> List[Pipeline]:
 # Register default pipelines
 register_pipeline(CellCountPipeline())
 register_pipeline(FluorescencePipeline())
+register_pipeline(EstrogenReceptorPipeline())

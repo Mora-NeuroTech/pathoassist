@@ -75,6 +75,8 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
                 return renderCellCountVisualization();
             case 'fluorescence':
                 return renderFluorescenceVisualization();
+            case 'estrogen_receptor':
+                return renderEstrogenReceptorVisualization();
             default:
                 return (
                     <div className="p-4 bg-gray-100 rounded-lg text-center">
@@ -211,6 +213,84 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const renderEstrogenReceptorVisualization = () => {
+        const {
+            blue_cell_count = 0,
+            brown_cell_count = 0,
+            blue_area_percent = 0,
+            brown_area_percent = 0,
+            staining_score = '-',
+            stain_intensity = '-',
+            intensity_score = '-',
+            total_score = '-',
+            outcome = '-'
+        } = metrics;
+
+        // Pie chart data for area percentage
+        const areaPieData = [
+            {name: 'Blue Area', value: blue_area_percent},
+            {name: 'Brown Area', value: brown_area_percent}
+        ];
+        const COLORS = ['#60a5fa', '#b45309']; // blue, brown
+
+        return (
+            <div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Blue Cell Count</h3>
+                        <p className="text-3xl font-bold text-primary-600">{blue_cell_count}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Brown Cell Count</h3>
+                        <p className="text-3xl font-bold text-primary-600">{brown_cell_count}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Staining Score</h3>
+                        <p className="text-3xl font-bold text-primary-600">{staining_score}</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Stain Intensity</h3>
+                        <p className="text-3xl font-bold text-primary-600">{stain_intensity.toFixed(3)}</p>
+                        <div className="mt-2 text-gray-500 text-sm">Intensity Score: {intensity_score}</div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Score</h3>
+                        <p className="text-3xl font-bold text-primary-600">{total_score}</p>
+                        <div className="mt-2 text-gray-500 text-sm">Outcome: <span className={`font-semibold ${outcome === 'Positive' ? 'text-red-600' : outcome === 'Low Positive' ? 'text-yellow-600' : 'text-green-600'}`}>{outcome}</span></div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Area Distribution</h3>
+                    <div className="h-56">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={areaPieData}
+                                    cx="50%"
+                                    cy="50%"
+                                    labelLine={false}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    dataKey="value"
+                                    label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                >
+                                    {areaPieData.map((_entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+                                    ))}
+                                </Pie>
+                                <Tooltip/>
+                            </PieChart>
+                        </ResponsiveContainer>
                     </div>
                 </div>
             </div>

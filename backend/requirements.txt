@@ -4,3 +4,9 @@ opencv-python
 numpy
 pydantic
 python-multipart
+torch
+torchvision
+segmentation_models_pytorch
+pillow
+matplotlib
+scikit-image

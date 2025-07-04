@@ -13,6 +13,7 @@ from .cell_count_pipeline import CellCountPipeline
 from .fluorescence_pipeline import FluorescencePipeline
 from .overlay_pipeline import OverlayPipeline
 from .estrogen_receptor_pipeline import EstrogenReceptorPipeline
+from .nottingham_tubule_pipeline import NottinghamTubulePipeline
 
 
 @dataclass
@@ -45,3 +46,4 @@ def list_available_pipelines() -> List[Pipeline]:
 register_pipeline(CellCountPipeline())
 register_pipeline(FluorescencePipeline())
 register_pipeline(EstrogenReceptorPipeline())
+register_pipeline(NottinghamTubulePipeline())

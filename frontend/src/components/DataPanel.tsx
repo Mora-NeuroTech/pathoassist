@@ -77,6 +77,8 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
                 return renderFluorescenceVisualization();
             case 'estrogen_receptor':
                 return renderEstrogenReceptorVisualization();
+            case 'nottingham_tubule':
+                return renderNottinghamTubuleVisualization();
             default:
                 return (
                     <div className="p-4 bg-gray-100 rounded-lg text-center">
@@ -296,6 +298,59 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
             </div>
         );
     };
+
+    const renderNottinghamTubuleVisualization = () => {
+        const {
+            tubule_fraction = 0,
+            nottingham_tubule_score = '-'
+        } = metrics;
+
+        // Prepare data for pie chart
+        const pieData = [
+            { name: 'Tubule', value: tubule_fraction * 100 },
+            { name: 'Non-tubule', value: 100 - tubule_fraction * 100 }
+        ];
+        const COLORS = ['#0ea5e9', '#f3f4f6']; // blue, gray
+
+        return (
+            <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Tubule Fraction</h3>
+                        <p className="text-3xl font-bold text-primary-600">{(tubule_fraction * 100).toFixed(2)}%</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Nottingham Tubule Score</h3>
+                        <p className="text-3xl font-bold text-primary-600">{nottingham_tubule_score}</p>
+                    </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Tubule Area Distribution</h3>
+                    <div className="h-56">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={pieData}
+                                    cx="50%"
+                                    cy="50%"
+                                    labelLine={false}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    dataKey="value"
+                                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                >
+                                    {pieData.map((_entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="data-panel">

@@ -84,7 +84,7 @@ class FluorescencePipeline(OverlayPipeline):
             intensity_metrics = {
                 "min_intensity": int(np.min(fluorescent_pixels)),
                 "max_intensity": int(np.max(fluorescent_pixels)),
-                "avg_intensity": int(np.mean(fluorescent_pixels)),
+                "avg_intensity": int(np.mean(fluorescent_pixels.astype(float))),
                 "area_percentage": float(np.sum(mask > 0) / mask.size * 100)
             }
 

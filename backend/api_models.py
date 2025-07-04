@@ -4,7 +4,7 @@ API Models for PathoAssist
 This module defines Pydantic models used for API request and response validation.
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
 from pydantic import BaseModel, Field
 
 

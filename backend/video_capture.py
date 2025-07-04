@@ -43,7 +43,7 @@ class VideoCapture:
         self.current_frame = None
         self.frame_lock = asyncio.Lock()
         self.last_frame_time = 0
-        self.latest_metrics = {}
+        self.latest_metrics: dict[str, Any] = {}
         self.metrics_lock = asyncio.Lock()
 
         # For testing without a camera
@@ -132,6 +132,10 @@ class VideoCapture:
                     success = True
                 else:
                     # Capture frame from camera
+                    if self.cap is None or not self.cap.isOpened():
+                        logger.warning("Camera not opened, using test patterns")
+                        self.use_test_pattern = True
+                        continue
                     success, frame = self.cap.read()
 
                 if success:

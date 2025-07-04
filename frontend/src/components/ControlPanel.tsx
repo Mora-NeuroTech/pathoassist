@@ -105,6 +105,42 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
           <p className="text-xs text-gray-500 mt-1">{description}</p>
         </div>
       );
+    } else if (Array.isArray(value) && value.length === 3) {
+      // Handle RGB color array parameters as a single color picker
+      // Convert array to hex string for input value
+      const rgbToHex = (arr: number[]) => {
+        return (
+          '#' + arr.map(x => {
+            const hex = Math.max(0, Math.min(255, x)).toString(16).padStart(2, '0');
+            return hex;
+          }).join('')
+        );
+      };
+      const hexToRgb = (hex: string) => {
+        if (!/^#([A-Fa-f0-9]{6})$/.test(hex)) return [0, 0, 0];
+        return [0, 2, 4].map(i => parseInt(hex.slice(1 + i, 3 + i), 16));
+      };
+      const currentRgb = params[paramName] || value;
+      return (
+        <div key={paramName} className="mb-4">
+          <label className="label" htmlFor={paramName}>
+            {paramName}
+          </label>
+          <input
+            type="color"
+            id={paramName}
+            value={rgbToHex(currentRgb)}
+            onChange={e => {
+              const rgb = hexToRgb(e.target.value);
+              handleParamChange(paramName, rgb);
+            }}
+            className="input w-16 h-10 p-0 border-none bg-transparent"
+            disabled={loading}
+            style={{ minWidth: '3rem', minHeight: '2rem', cursor: loading ? 'not-allowed' : 'pointer' }}
+          />
+          <p className="text-xs text-gray-500 mt-1">{description} (RGB color)</p>
+        </div>
+      );
     } else if (Array.isArray(value)) {
       // Handle array parameters (like colors or positions)
       return (

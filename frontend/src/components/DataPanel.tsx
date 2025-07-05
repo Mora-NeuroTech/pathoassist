@@ -79,6 +79,8 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
                 return renderEstrogenReceptorVisualization();
             case 'nottingham_tubule':
                 return renderNottinghamTubuleVisualization();
+            case 'nuclear_pleomorphism':
+                return renderNuclearPleomorphismVisualization();
             default:
                 return (
                     <div className="p-4 bg-gray-100 rounded-lg text-center">
@@ -345,6 +347,103 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
                                 </Pie>
                                 <Tooltip />
                             </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const renderNuclearPleomorphismVisualization = () => {
+        const {
+            nuclei_count = 0,
+            mask_area = 0,
+            pleomorphism_score = '-',
+            pleomorphism_grade = '-',
+            pleomorphism_metrics = {}
+        } = metrics;
+
+        // Destructure pleomorphism_metrics with defaults
+        const {
+            total_nuclei = '-',
+            mean_area = '-',
+            area_cv = '-',
+            diameter_cv = '-',
+            mean_circularity = '-',
+            circularity_std = '-',
+            mean_solidity = '-',
+            mean_eccentricity = '-',
+            aspect_ratio_cv = '-',
+            intensity_variation = '-',
+            size_score = '-',
+            shape_score = '-',
+            texture_score = '-'
+        } = pleomorphism_metrics || {};
+
+        // Prepare data for a bar chart of the three scores
+        const scoreData = [
+            { name: 'Size', value: size_score },
+            { name: 'Shape', value: shape_score },
+            { name: 'Texture', value: texture_score }
+        ];
+
+        return (
+            <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Extremely Defective Nuclei Count</h3>
+                        <p className="text-3xl font-bold text-primary-600">{nuclei_count}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Mask Area</h3>
+                        <p className="text-3xl font-bold text-primary-600">{mask_area}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Pleomorphism Score</h3>
+                        <p className="text-3xl font-bold text-primary-600">{pleomorphism_score.toFixed(3)}</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">Pleomorphism Grade</h3>
+                        <p className={`text-3xl font-bold ${pleomorphism_grade.includes('1') ? 'text-yellow-600' : pleomorphism_grade.includes('2') ? 'text-orange-600' : 'text-red-600'}`}>{pleomorphism_grade}</p>
+                    </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Pleomorphism Metrics</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <div className="text-gray-600">Mean Area: <span className="font-semibold text-primary-600">{mean_area.toFixed ? mean_area.toFixed(2) : mean_area}</span></div>
+                            <div className="text-gray-600">Area CV: <span className="font-semibold text-primary-600">{area_cv.toFixed ? area_cv.toFixed(3) : area_cv}</span></div>
+                            <div className="text-gray-600">Diameter CV: <span className="font-semibold text-primary-600">{diameter_cv.toFixed ? diameter_cv.toFixed(3) : diameter_cv}</span></div>
+                        </div>
+                        <div>
+                            <div className="text-gray-600">Mean Circularity: <span className="font-semibold text-primary-600">{mean_circularity.toFixed ? mean_circularity.toFixed(3) : mean_circularity}</span></div>
+                            <div className="text-gray-600">Circularity Std: <span className="font-semibold text-primary-600">{circularity_std.toFixed ? circularity_std.toFixed(3) : circularity_std}</span></div>
+                            <div className="text-gray-600">Mean Solidity: <span className="font-semibold text-primary-600">{mean_solidity.toFixed ? mean_solidity.toFixed(3) : mean_solidity}</span></div>
+                            <div className="text-gray-600">Mean Eccentricity: <span className="font-semibold text-primary-600">{mean_eccentricity.toFixed ? mean_eccentricity.toFixed(3) : mean_eccentricity}</span></div>
+                        </div>
+                        <div>
+                            <div className="text-gray-600">Aspect Ratio CV: <span className="font-semibold text-primary-600">{aspect_ratio_cv.toFixed ? aspect_ratio_cv.toFixed(3) : aspect_ratio_cv}</span></div>
+                            <div className="text-gray-600">Intensity Variation: <span className="font-semibold text-primary-600">{intensity_variation.toFixed ? intensity_variation.toFixed(3) : intensity_variation}</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Pleomorphism Subscores</h3>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                data={scoreData}
+                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="value" name="Score" fill="#0ea5e9" />
+                            </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>

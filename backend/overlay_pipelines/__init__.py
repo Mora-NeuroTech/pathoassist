@@ -14,6 +14,7 @@ from .fluorescence_pipeline import FluorescencePipeline
 from .overlay_pipeline import OverlayPipeline
 from .estrogen_receptor_pipeline import EstrogenReceptorPipeline
 from .nottingham_tubule_pipeline import NottinghamTubulePipeline
+from .nuclear_pleomorphism_pipeline import NuclearPleomorphismPipeline
 
 
 @dataclass
@@ -47,3 +48,4 @@ register_pipeline(CellCountPipeline())
 register_pipeline(FluorescencePipeline())
 register_pipeline(EstrogenReceptorPipeline())
 register_pipeline(NottinghamTubulePipeline())
+register_pipeline(NuclearPleomorphismPipeline())

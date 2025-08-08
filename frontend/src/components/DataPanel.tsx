@@ -365,7 +365,6 @@ const DataPanel: React.FC<DataPanelProps> = ({activePipeline}) => {
 
         // Destructure pleomorphism_metrics with defaults
         const {
-            total_nuclei = '-',
             mean_area = '-',
             area_cv = '-',
             diameter_cv = '-',

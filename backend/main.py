@@ -58,7 +58,7 @@ app.add_middleware(
 # Store active pipeline configuration
 active_pipeline_config = PipelineConfig(
     name="cell_count",
-    params={"threshold": 128, "min_size": 50, "max_size": 1000}
+    params={"threshold": 0.9, "min_size": 50, "max_size": 1000}
 )
 
 

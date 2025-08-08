@@ -16,7 +16,7 @@ class FluorescencePipeline(OverlayPipeline):
             description="Detects and measures fluorescence intensity in microscope images"
         )
         self.default_params = {
-            "threshold": 50,
+            "threshold": 200,
             "color_map": cv2.COLORMAP_JET,
             "alpha": 0.5,
             "show_intensity": True,
